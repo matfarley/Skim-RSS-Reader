@@ -28,9 +28,7 @@ public class RssContract {
         public static final String TITLE = "title";
         public static final String DESCRIPTION = "description";
         public static final String PUBLISH_DATE = "pub_date";
-//        public static final String AUTHOR = "author";
         public static final String ARTICLE_URL = "article_url";
-//        public static final String ARTICLE_CONTENT = "article_encoded_content";
         public static final String ARTICLE_IS_READ = "article_is_read";
         public static final String THUMBNAIL_URL = "thumbnail_url";
 
