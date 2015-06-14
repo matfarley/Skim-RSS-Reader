@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Skim RSS</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="msg_no_connection">Please connect to internet and try again.</string>
+</resources>
