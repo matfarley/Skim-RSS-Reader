@@ -45,9 +45,7 @@ public class SkimRssFragment extends Fragment implements LoaderManager.LoaderCal
             ArticleEntry.TITLE,
             ArticleEntry.DESCRIPTION,
             ArticleEntry.PUBLISH_DATE,
-//            ArticleEntry.AUTHOR,
             ArticleEntry.ARTICLE_URL,
-//            ArticleEntry.ARTICLE_CONTENT,
             ArticleEntry.ARTICLE_IS_READ,
             ArticleEntry.THUMBNAIL_URL
     };
