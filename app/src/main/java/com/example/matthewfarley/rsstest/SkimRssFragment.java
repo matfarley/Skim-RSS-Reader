@@ -128,12 +128,6 @@ public class SkimRssFragment extends Fragment implements LoaderManager.LoaderCal
         }
     }
 
-//    public void refreshListViewData(Cursor cursor){
-//        mRssCursorAdapter = new RssArrayAdapter(getActivity(), articleList);
-//        mListView.setAdapter(mRssArrayAdapter);
-//        mRssArrayAdapter.notifyDataSetChanged();
-//    }
-
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getActivity().getSystemService(getActivity().CONNECTIVITY_SERVICE);
