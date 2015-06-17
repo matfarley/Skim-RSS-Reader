@@ -13,26 +13,33 @@ import java.security.PrivateKey;
  * Created by matthewfarley on 31/05/15.
  */
 public class RssDBHelper extends SQLiteOpenHelper {
-    // If you change the database schema, you must increment the database version.
+    public static final String TAG = RssDBHelper.class.getSimpleName();
+
     private static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "rss.db";
 
-    public static final String TAG = RssDBHelper.class.getSimpleName();
+    private static RssDBHelper rssDBHelper = null;
 
-    public RssDBHelper(Context context){
+    public static RssDBHelper getInstance(Context context){
+        if (rssDBHelper == null){
+            rssDBHelper = new RssDBHelper(context);
+        }
+        return rssDBHelper;
+    }
+
+    private RssDBHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // We use the article guid as the primary key as it is unique.
         String SQL_CREATE_ARTICLE_TABLE = "CREATE TABLE " + ArticleEntry.TABLE_NAME + " (" +
-                ArticleEntry.ROW_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                ArticleEntry.ROW_ID + " TEXT PRIMARY KEY, " +
                 ArticleEntry.TITLE + " TEXT NOT NULL, " +
                 ArticleEntry.DESCRIPTION + " TEXT NOT NULL, " +
                 ArticleEntry.PUBLISH_DATE + " TEXT NOT NULL, " +
-//                ArticleEntry.AUTHOR + " TEXT NOT NULL, " +
                 ArticleEntry.ARTICLE_URL + " TEXT NOT NULL, " +
-//                ArticleEntry.ARTICLE_CONTENT + " TEXT NOT NULL, " +
                 ArticleEntry.ARTICLE_IS_READ + " INTEGER DEFAULT 0, " +
                 ArticleEntry.THUMBNAIL_URL + " TEXT NOT NULL);";
         Log.i(TAG, SQL_CREATE_ARTICLE_TABLE);

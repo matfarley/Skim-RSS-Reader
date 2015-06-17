@@ -1,12 +1,20 @@
 package com.example.matthewfarley.rsstest.Service;
 
 import android.app.IntentService;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Base64;
 import android.util.Log;
 
 import com.example.matthewfarley.rsstest.Data.RssContract;
+import com.example.matthewfarley.rsstest.Data.RssDBHelper;
 import com.example.matthewfarley.rsstest.Models.Article;
+
+import com.example.matthewfarley.rsstest.Data.RssContract.ArticleEntry;
+import com.example.matthewfarley.rsstest.Util;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -70,23 +78,42 @@ public class RssService extends IntentService {
         // Get and insert the new weather information into the database
         Vector<ContentValues> cVVector = new Vector<ContentValues>(articles.size());
         for (Article article : articles){
-            ContentValues articleValues = new ContentValues();
-            articleValues.put(RssContract.ArticleEntry.TITLE, article.getTitle());
-            articleValues.put(RssContract.ArticleEntry.DESCRIPTION, article.getDescription());
-            articleValues.put(RssContract.ArticleEntry.PUBLISH_DATE, article.getPubDate());
-//            articleValues.put(ArticleEntry.AUTHOR, article.getAuthor());
-            articleValues.put(RssContract.ArticleEntry.ARTICLE_URL, article.getUrl());
-//            articleValues.put(ArticleEntry.ARTICLE_CONTENT, article.getEncodedContent());
-            articleValues.put(RssContract.ArticleEntry.ARTICLE_IS_READ, 0); // New so is false
-            articleValues.put(RssContract.ArticleEntry.THUMBNAIL_URL, article.getThumbnailURL());
-            cVVector.add(articleValues);
+            // Check if article is in db.
+            String guidBase64 = Util.base64StringFromString(article.getGuid());
+            if(!dbHasArticle(ArticleEntry.ROW_ID, guidBase64)){
+                ContentValues articleValues = new ContentValues();
+                //Use guid as primary key because it is unique.  Make base64 so it will go in db.
+                articleValues.put(ArticleEntry.ROW_ID, guidBase64);
+                articleValues.put(ArticleEntry.TITLE, article.getTitle());
+                articleValues.put(ArticleEntry.DESCRIPTION, article.getDescription());
+                articleValues.put(ArticleEntry.PUBLISH_DATE, article.getPubDate());
+                articleValues.put(ArticleEntry.ARTICLE_URL, article.getUrl());
+                articleValues.put(ArticleEntry.ARTICLE_IS_READ, 0); // New, so is false
+                articleValues.put(ArticleEntry.THUMBNAIL_URL, article.getThumbnailURL());
+                cVVector.add(articleValues);
+            }
         }
 
         if (cVVector.size() > 0){
             ContentValues[] cvArray = new ContentValues[cVVector.size()];
             cVVector.toArray(cvArray);
-            this.getContentResolver().bulkInsert(RssContract.ArticleEntry.CONTENT_URI, cvArray);
+            this.getContentResolver().bulkInsert(ArticleEntry.CONTENT_URI, cvArray);
         }
+    }
 
+
+    public boolean dbHasArticle(String dbfield, String fieldValue) {
+        Cursor cursor = this.getContentResolver().query(
+                ArticleEntry.CONTENT_URI,
+                null,
+                dbfield + " = ?",
+                new String[]{fieldValue},
+                null);
+        if(cursor.getCount() <= 0){
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
     }
 }

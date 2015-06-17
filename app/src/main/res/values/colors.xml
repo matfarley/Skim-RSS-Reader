@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="item_list_grey">#FF0000</color>
+    <color name="item_list_grey">#949494</color>
+    <color name="item_list_black">#202020</color>
 </resources>

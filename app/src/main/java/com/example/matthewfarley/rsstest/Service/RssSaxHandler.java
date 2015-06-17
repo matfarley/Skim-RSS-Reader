@@ -28,6 +28,7 @@ public class RssSaxHandler extends DefaultHandler{
     public static final String XML_ELEMENT_CONTENT = "encoded";
     public static final String XML_ELEMENT_ITEM = "item";
     public static final String XML_ELEMENT_URL = "link";
+    public static final String XML_ELEMENT_GUID = "guid";
     public static final String XML_ELEMENT_THUMBNAIL = "media:content";
 
     // Feed and Article objects to use for temporary storage
@@ -71,6 +72,8 @@ public class RssSaxHandler extends DefaultHandler{
 
         if (localName.equalsIgnoreCase(XML_ELEMENT_TITLE)){
             currentArticle.setTitle(chars.toString());
+        } else if (localName.equalsIgnoreCase(XML_ELEMENT_GUID)){
+            currentArticle.setGuid(chars.toString());
         } else if (localName.equalsIgnoreCase(XML_ELEMENT_DESCRIPTION)){
             currentArticle.setDescription(chars.toString());
         } else if (localName.equalsIgnoreCase(XML_ELEMENT_PUBLISHED)){

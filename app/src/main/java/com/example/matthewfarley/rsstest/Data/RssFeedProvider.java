@@ -21,7 +21,7 @@ public class RssFeedProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        mRssDBHelper = new RssDBHelper(getContext());
+        mRssDBHelper = RssDBHelper.getInstance(getContext());
         return true;
     }
 

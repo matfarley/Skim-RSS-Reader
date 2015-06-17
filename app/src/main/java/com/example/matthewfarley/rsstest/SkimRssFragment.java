@@ -4,6 +4,8 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.Fragment;
 import android.app.LoaderManager;
+import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -23,10 +25,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-import com.example.matthewfarley.rsstest.Data.RssContract;
 import com.example.matthewfarley.rsstest.Data.RssContract.ArticleEntry;
-import com.example.matthewfarley.rsstest.Data.RssDBHelper;
+import com.example.matthewfarley.rsstest.Models.Article;
 import com.example.matthewfarley.rsstest.Service.RssService;
+
+import java.util.HashMap;
 
 
 /**
@@ -71,7 +74,6 @@ public class SkimRssFragment extends Fragment implements LoaderManager.LoaderCal
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                getActivity().deleteDatabase(RssDBHelper.DATABASE_NAME);
                 refreshListWithFeedUrl(FEED_URL);
                 return true;
             default:
@@ -100,10 +102,18 @@ public class SkimRssFragment extends Fragment implements LoaderManager.LoaderCal
                     transaction.addToBackStack(null);
                     transaction.commit();
                 }
-                // Need set articles to read in the database
-//                Article article = (Article)mListView.getItemAtPosition(position);
-//                article.setRead(true);
-//                mRssCursorAdapter.notifyDataSetChanged();
+                // TODO - Get this off UI Thread!
+                HashMap<String, Object> tags = (HashMap<String, Object>)view.getTag();
+                String articleID = (String)tags.get(RssCursorAdapter.TAG_ARTICLE_ID);
+                ContentValues cv = new ContentValues();
+                cv.put(ArticleEntry.ARTICLE_IS_READ, 1);
+                getActivity().getContentResolver().update(
+                        ArticleEntry.CONTENT_URI,
+                        cv,
+                        ArticleEntry._ID + " = ?",
+                        new String[]{articleID}
+                );
+                mRssCursorAdapter.notifyDataSetChanged();
             }
         });
 
@@ -111,7 +121,6 @@ public class SkimRssFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     private void refreshListWithFeedUrl(String url){
-
         if (isNetworkAvailable()){
             Intent intent = new Intent(getActivity(), RssService.class);
             intent.putExtra(RssService.RSS_FEED_URL_KEY,
@@ -161,6 +170,7 @@ public class SkimRssFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mRssCursorAdapter.swapCursor(data);
+
     }
 
     @Override
