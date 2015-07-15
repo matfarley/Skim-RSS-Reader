@@ -8,14 +8,12 @@ import android.util.Log;
 
 import com.example.matthewfarley.rsstest.Models.Article;
 
-import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-
+import org.xml.sax.helpers.DefaultHandler;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class RssSaxHandler extends DefaultHandler{
     static  final String TAG = RssSaxHandler.class.getSimpleName();

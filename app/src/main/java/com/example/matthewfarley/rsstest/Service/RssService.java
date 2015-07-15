@@ -1,31 +1,22 @@
 package com.example.matthewfarley.rsstest.Service;
 
 import android.app.IntentService;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Base64;
 import android.util.Log;
 
-import com.example.matthewfarley.rsstest.Data.RssContract;
-import com.example.matthewfarley.rsstest.Data.RssDBHelper;
-import com.example.matthewfarley.rsstest.Models.Article;
-
 import com.example.matthewfarley.rsstest.Data.RssContract.ArticleEntry;
-import com.example.matthewfarley.rsstest.Util;
+import com.example.matthewfarley.rsstest.Models.Article;
+import com.example.matthewfarley.rsstest.Base64Util;
 
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -62,13 +53,8 @@ public class RssService extends IntentService {
             articles = rssSaxHandler.getArticleList();
             Log.i(TAG, "PARSING FINISHED");
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.e(TAG, e.getMessage() + " >> " + e.toString());
-        } catch (SAXException e) {
-            Log.e(TAG, e.toString());
-            e.printStackTrace();
-        } catch (ParserConfigurationException e) {
-            Log.e(TAG,  e.toString());
         }
 
         populateDatabase(articles);
@@ -79,7 +65,7 @@ public class RssService extends IntentService {
         Vector<ContentValues> cVVector = new Vector<ContentValues>(articles.size());
         for (Article article : articles){
             // Check if article is in db.
-            String guidBase64 = Util.base64StringFromString(article.getGuid());
+            String guidBase64 = Base64Util.base64StringFromString(article.getGuid());
             if(!dbHasArticle(ArticleEntry.ROW_ID, guidBase64)){
                 ContentValues articleValues = new ContentValues();
                 //Use guid as primary key because it is unique.  Make base64 so it will go in db.

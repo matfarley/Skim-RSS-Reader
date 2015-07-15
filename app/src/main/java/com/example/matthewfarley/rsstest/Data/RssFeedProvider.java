@@ -11,7 +11,7 @@ import android.net.Uri;
  * Created by matthewfarley on 13/06/15.
  */
 public class RssFeedProvider extends ContentProvider {
-    private RssDBHelper mRssDBHelper;
+    private RssDbHelper mRssDbHelper;
 
     // Setting it up so I can add other tables later
     private static final int ARTICLES = 100;
@@ -21,13 +21,13 @@ public class RssFeedProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        mRssDBHelper = RssDBHelper.getInstance(getContext());
+        mRssDbHelper = RssDbHelper.getInstance(getContext());
         return true;
     }
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        SQLiteDatabase db = mRssDBHelper.getWritableDatabase();
+        SQLiteDatabase db = mRssDbHelper.getWritableDatabase();
         Uri returnUri;
         long _id = db.insert(RssContract.ArticleEntry.TABLE_NAME, null, values);
         if(_id >0){
@@ -44,7 +44,7 @@ public class RssFeedProvider extends ContentProvider {
         Cursor result;
         switch (sUriMatcher.match(uri)) {
             case ARTICLES:
-                result =  mRssDBHelper.getReadableDatabase().query(
+                result =  mRssDbHelper.getReadableDatabase().query(
                         RssContract.ArticleEntry.TABLE_NAME,
                         projection,
                         selection,
@@ -73,7 +73,7 @@ public class RssFeedProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        final SQLiteDatabase db = mRssDBHelper.getWritableDatabase();
+        final SQLiteDatabase db = mRssDbHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         int rowsDeleted;
         switch (match) {
@@ -93,7 +93,7 @@ public class RssFeedProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        final SQLiteDatabase db = mRssDBHelper.getWritableDatabase();
+        final SQLiteDatabase db = mRssDbHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         int rowsUpdated;
 
@@ -113,7 +113,7 @@ public class RssFeedProvider extends ContentProvider {
 
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
-        final SQLiteDatabase db = mRssDBHelper.getWritableDatabase();
+        final SQLiteDatabase db = mRssDbHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case ARTICLES:

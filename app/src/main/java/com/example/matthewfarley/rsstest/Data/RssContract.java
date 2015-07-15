@@ -32,8 +32,6 @@ public class RssContract {
         public static final String ARTICLE_IS_READ = "article_is_read";
         public static final String THUMBNAIL_URL = "thumbnail_url";
 
-        // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
-        // must change.
         public static final int COL_ARTICLE_ID = 0;
         public static final int COL_ARTICLE_TITLE = 1;
         public static final int COL_ARTICLE_DESCRIPTION = 2;

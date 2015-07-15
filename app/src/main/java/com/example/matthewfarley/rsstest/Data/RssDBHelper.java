@@ -6,28 +6,25 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import com.example.matthewfarley.rsstest.Data.RssContract.ArticleEntry;
 
-
-import java.security.PrivateKey;
-
 /**
  * Created by matthewfarley on 31/05/15.
  */
-public class RssDBHelper extends SQLiteOpenHelper {
-    public static final String TAG = RssDBHelper.class.getSimpleName();
+public class RssDbHelper extends SQLiteOpenHelper {
+    public static final String TAG = RssDbHelper.class.getSimpleName();
 
     private static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "rss.db";
 
-    private static RssDBHelper rssDBHelper = null;
+    private static RssDbHelper rssDbHelper = null;
 
-    public static RssDBHelper getInstance(Context context){
-        if (rssDBHelper == null){
-            rssDBHelper = new RssDBHelper(context);
+    public static RssDbHelper getInstance(Context context){
+        if (rssDbHelper == null){
+            rssDbHelper = new RssDbHelper(context);
         }
-        return rssDBHelper;
+        return rssDbHelper;
     }
 
-    private RssDBHelper(Context context){
+    private RssDbHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

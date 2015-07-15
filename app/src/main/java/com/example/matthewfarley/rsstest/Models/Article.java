@@ -2,8 +2,6 @@ package com.example.matthewfarley.rsstest.Models;
 
 import java.io.Serializable;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 
 public class Article implements Serializable {
 	

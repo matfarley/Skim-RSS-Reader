@@ -7,7 +7,7 @@ import java.io.UnsupportedEncodingException;
 /**
  * Created by matthewfarley on 17/06/15.
  */
-public class Util {
+public class Base64Util {
 
     public static String base64StringFromString(String startingString){
         byte[] data = null;
